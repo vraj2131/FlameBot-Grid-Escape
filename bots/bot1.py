@@ -3,7 +3,8 @@ from fireSpread import FireSpread
 import random
 
 class Bot1:
-    def _init_(self, environment, q=0.5):
+    def __init__(self, environment, q=0.5):
+        """Initialize Bot1 with the environment and flammability parameter q."""
         self.environment = environment
         self.q = q
         self.bot_position = None

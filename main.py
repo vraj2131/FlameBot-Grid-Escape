@@ -1,46 +1,50 @@
-# from environment import ShipEnvironment
-
-# def main():
-#     env = ShipEnvironment(grid_size=40)
-    
-#     env.create_environment()
-
-# if _name_ == "_main_":
-#     main()
 import time
+import tkinter as tk
 from environment import ShipEnvironment
 from bots import Bot1
-import matplotlib.pyplot as plt
-import numpy as np
-from matplotlib import colors
 
-def visualize(environment, fire_spread, bot, title):
-    """Visualize the environment with the bot, fire, and button using specified colors."""
-    grid = np.copy(environment.grid)
-    fire = fire_spread.fire_grid
-    bot_pos = bot.bot_position
-    button_pos = bot.button_position
 
-    # Update grid with fire, bot, and button positions
-    for x in range(environment.grid_size):
-        for y in range(environment.grid_size):
-            if fire[x, y] == 1:
-                grid[x, y] = 2  # Fire represented as 2 (Red)
-            if (x, y) == bot_pos:
-                grid[x, y] = 3  # Bot represented as 3 (Blue)
-            if (x, y) == button_pos:
-                grid[x, y] = 4  # Button represented as 4 (Green)
+class GridVisualizer:
+    def __init__(self, master, environment, fire_spread, bot, cell_size=15):
+        self.master = master
+        self.environment = environment
+        self.fire_spread = fire_spread
+        self.bot = bot
+        self.cell_size = cell_size
+        self.canvas_size = environment.grid_size * cell_size
+        self.canvas = tk.Canvas(master, width=self.canvas_size, height=self.canvas_size)
+        self.canvas.pack()
 
-    # Custom colormap: 0 = blocked (black), 1 = open (white), 2 = fire (red), 3 = bot (blue), 4 = button (green)
-    cmap = colors.ListedColormap(['black', 'white', 'red', 'blue', 'green'])
-    bounds = [0, 1, 2, 3, 4, 5]  # Boundaries for the color values
-    norm = colors.BoundaryNorm(bounds, cmap.N)
+    def draw_grid(self):
+        """Draw the entire grid based on the environment, fire, bot, and button."""
+        self.canvas.delete("all")  # Clear the canvas for redrawing
 
-    # Plot the grid
-    plt.imshow(grid, cmap=cmap, norm=norm)
-    plt.title(title)
-    plt.colorbar(ticks=[0, 1, 2, 3, 4], label='Cell State')
-    plt.show()
+        for x in range(self.environment.grid_size):
+            for y in range(self.environment.grid_size):
+                # Determine the color of the cell based on its state
+                if self.fire_spread.fire_grid[x, y] == 1:
+                    color = "red"  # Fire
+                elif (x, y) == self.bot.bot_position:
+                    color = "blue"  # Bot
+                elif (x, y) == self.bot.button_position:
+                    color = "green"  # Button
+                elif self.environment.grid[x, y] == 1:
+                    color = "white"  # Open space
+                else:
+                    color = "black"  # Blocked
+
+                # Draw the rectangle on the canvas
+                self.canvas.create_rectangle(
+                    y * self.cell_size, x * self.cell_size,
+                    (y + 1) * self.cell_size, (x + 1) * self.cell_size,
+                    fill=color, outline="gray"
+                )
+
+    def update(self):
+        """Update the visualization of the grid."""
+        self.draw_grid()
+        self.master.update_idletasks()
+
 
 def main():
     # Create the environment
@@ -51,8 +55,10 @@ def main():
     bot = Bot1(env, q=0.5)
     bot.initialize()  # Initialize fire, bot, and button
 
-    # Start the visualization
-    visualize(env, bot.fire_spread, bot, title="Initial State")
+    # Create the Tkinter window and visualizer
+    root = tk.Tk()
+    root.title("Live Grid Simulation")
+    visualizer = GridVisualizer(root, env, bot.fire_spread, bot)
 
     # Plan the bot's initial path to the button
     bot.plan_path()
@@ -61,16 +67,17 @@ def main():
     for t in range(1, 21):  # Simulate 20 time steps (can be adjusted)
         print(f"Time step {t}:")
         
+        # Update visualization
+        visualizer.update()
+
         # Check if bot has reached the button
         if bot.bot_position == bot.button_position:
             print("Bot reached the button! Success!")
-            visualize(env, bot.fire_spread, bot, title=f"Success at Time Step {t}")
             break
         
         # Check for failure (bot steps into fire)
         if bot.check_failure():
             print("Bot caught on fire! Failure!")
-            visualize(env, bot.fire_spread, bot, title=f"Failure at Time Step {t}")
             break
 
         # Move the bot along its path
@@ -79,14 +86,14 @@ def main():
         # Spread the fire
         bot.fire_spread.spread_fire()
 
-        # Re-visualize the state
-        visualize(env, bot.fire_spread, bot, title=f"Time Step {t}")
+        # Update visualization again after moving and fire spreading
+        visualizer.update()
 
         # Wait for a moment to better visualize the time steps
-        time.sleep(1)
-    
-    else:
-        print("Bot did not reach the button within the time limit.")
+        time.sleep(0.5)
 
-if __name__ == "_main_":
+    root.mainloop()
+
+
+if __name__ == "__main__":
     main()

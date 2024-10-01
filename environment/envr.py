@@ -1,13 +1,17 @@
 import random
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import colors
+import tkinter as tk
 
 class ShipEnvironment:
     def __init__(self, grid_size=40):
         self.grid_size = grid_size
         self.grid = np.zeros((grid_size, grid_size))  # Start with all cells blocked (0 represents blocked)
         self.open_cells = []
+        self.cell_size = 15  # Size of each cell for Tkinter visualization
+        self.window = tk.Tk()
+        self.window.title("Ship Environment")
+        self.canvas = tk.Canvas(self.window, width=self.grid_size * self.cell_size, height=self.grid_size * self.cell_size)
+        self.canvas.pack()
 
     def initialize_grid(self):
         # Randomly choose an interior cell to open
@@ -63,25 +67,26 @@ class ShipEnvironment:
                 self.open_cells.append(cell_to_open)
 
     def visualize_grid(self):
-        """Visualize the grid with visible cell boundaries."""
-        fig, ax = plt.subplots()
-        cmap = colors.ListedColormap(['black', 'white'])  # Black for blocked, white for open
-        bounds = [0, 0.5, 1]
-        norm = colors.BoundaryNorm(bounds, cmap.N)
+        """Visualize the grid in Tkinter window."""
+        self.canvas.delete("all")  # Clear the canvas before each redraw
 
-        # Display grid with boundaries
-        ax.imshow(self.grid, cmap=cmap, norm=norm)
+        for x in range(self.grid_size):
+            for y in range(self.grid_size):
+                x1 = x * self.cell_size
+                y1 = y * self.cell_size
+                x2 = x1 + self.cell_size
+                y2 = y1 + self.cell_size
+                
+                if self.grid[x, y] == 0:
+                    color = "black"  # Blocked cell
+                elif self.grid[x, y] == 1:
+                    color = "white"  # Open cell
+                else:
+                    color = "gray"  # Default
 
-        # Draw grid lines
-        ax.set_xticks(np.arange(-0.5, self.grid_size, 1), minor=True)
-        ax.set_yticks(np.arange(-0.5, self.grid_size, 1), minor=True)
-        ax.grid(which="minor", color="gray", linestyle='-', linewidth=2)
-
-        # Set the grid lines to cover the cells
-        ax.tick_params(which="minor", size=0)
-
-        plt.title(f'{self.grid_size}x{self.grid_size} Grid Layout with Boundaries')
-        plt.show()
+                self.canvas.create_rectangle(x1, y1, x2, y2, fill=color, outline="gray")
+        
+        self.window.update()  # Update the Tkinter window
 
     def create_environment(self):
         """Create the ship environment by opening cells and visualizing the grid."""
@@ -90,4 +95,10 @@ class ShipEnvironment:
         self.identify_and_open_dead_ends()
         self.visualize_grid()
 
+        # Keep the Tkinter window open
+        self.window.mainloop()
 
+# Example usage
+if __name__ == "__main__":
+    env = ShipEnvironment()
+    env.create_environment()
