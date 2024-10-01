@@ -21,7 +21,7 @@ class ShipEnvironment:
         self.grid[start_x, start_y] = 1  # Open the cell (1 represents open)
         self.open_cells.append((start_x, start_y))
         self.visualize_grid()  # Update visualization after opening the first cell
-        self.window.update()
+        # self.window.update()
         # time.sleep(0.1)  # Add delay to visualize the first step
 
     def open_cells_with_neighbors(self):
@@ -44,7 +44,7 @@ class ShipEnvironment:
 
             # Visualize and update window step by step
             self.visualize_grid()
-            self.window.update()
+            # self.window.update()
             # time.sleep(0.05)  # Short delay to see the progress gradually
 
     def count_open_neighbors(self, x, y):
@@ -77,7 +77,7 @@ class ShipEnvironment:
 
                 # Visualize and update window
                 self.visualize_grid()
-                self.window.update()
+                # self.window.update()
                 # time.sleep(0.05)
 
     def visualize_grid(self):
