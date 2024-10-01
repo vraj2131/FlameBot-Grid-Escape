@@ -88,5 +88,5 @@ def main():
     else:
         print("Bot did not reach the button within the time limit.")
 
-if _name_ == "_main_":
+if __name__ == "_main_":
     main()
