@@ -1,6 +1,7 @@
 import random
 import numpy as np
 import tkinter as tk
+import time
 
 class ShipEnvironment:
     def __init__(self, grid_size=40):
@@ -14,14 +15,17 @@ class ShipEnvironment:
         self.canvas.pack()
 
     def initialize_grid(self):
-        # Randomly choose an interior cell to open
+        """Randomly choose an interior cell to open."""
         start_x = random.randint(1, self.grid_size - 2)
         start_y = random.randint(1, self.grid_size - 2)
         self.grid[start_x, start_y] = 1  # Open the cell (1 represents open)
         self.open_cells.append((start_x, start_y))
+        self.visualize_grid()  # Update visualization after opening the first cell
+        self.window.update()
+        # time.sleep(0.1)  # Add delay to visualize the first step
 
     def open_cells_with_neighbors(self):
-        # Keep opening cells until no more candidates exist
+        """Gradually open cells with visible steps."""
         while True:
             # Identify blocked cells with exactly one open neighbor
             candidates = []
@@ -37,6 +41,11 @@ class ShipEnvironment:
             cell_to_open = random.choice(candidates)
             self.grid[cell_to_open[0], cell_to_open[1]] = 1
             self.open_cells.append(cell_to_open)
+
+            # Visualize and update window step by step
+            self.visualize_grid()
+            self.window.update()
+            # time.sleep(0.05)  # Short delay to see the progress gradually
 
     def count_open_neighbors(self, x, y):
         """Count how many open neighbors the cell (x, y) has."""
@@ -66,6 +75,11 @@ class ShipEnvironment:
                 self.grid[cell_to_open[0], cell_to_open[1]] = 1
                 self.open_cells.append(cell_to_open)
 
+                # Visualize and update window
+                self.visualize_grid()
+                self.window.update()
+                # time.sleep(0.05)
+
     def visualize_grid(self):
         """Visualize the grid in Tkinter window."""
         self.canvas.delete("all")  # Clear the canvas before each redraw
@@ -85,17 +99,14 @@ class ShipEnvironment:
                     color = "gray"  # Default
 
                 self.canvas.create_rectangle(x1, y1, x2, y2, fill=color, outline="gray")
-        
-        self.window.update()  # Update the Tkinter window
 
     def create_environment(self):
         """Create the ship environment by opening cells and visualizing the grid."""
         self.initialize_grid()
         self.open_cells_with_neighbors()
         self.identify_and_open_dead_ends()
-        self.visualize_grid()
 
-        # Keep the Tkinter window open
+        # Keep the Tkinter window open after creating the environment
         self.window.mainloop()
 
 # Example usage
