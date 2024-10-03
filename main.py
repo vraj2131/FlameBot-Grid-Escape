@@ -1,7 +1,7 @@
 import time
 import tkinter as tk
 from environment import ShipEnvironment
-from bots import Bot1, Bot2, Bot3
+from bots import Bot1, Bot2, Bot3, Bot4
 from utils.grid_visualizer import GridVisualizer
 
 def main():
@@ -11,7 +11,7 @@ def main():
 
     # Initialize Bot1 with flammability parameter q
     # bot = Bot1(env, q=0.5)
-    bot = Bot3(env, q=0.5)
+    bot = Bot4(env, q=0.5)
     bot.initialize()  # Initialize fire, bot, and button
 
     # Create the Tkinter window and visualizer
@@ -45,6 +45,7 @@ def main():
             break
         # Move the bot along its path
         bot.move_bot()
+        # bot.move_towards_button()
 
         # Spread the fire
         bot.fire_spread.spread_fire()
