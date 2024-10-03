@@ -5,7 +5,7 @@ from bots import Bot1, Bot2, Bot3, Bot4
 from utils.grid_visualizer import GridVisualizer
 
 def main():
-    # Create the environment
+    # Create the environment 
     env = ShipEnvironment()
     env.create_environment()
 
