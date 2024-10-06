@@ -94,10 +94,24 @@ class Bot2:
         total_path.reverse()
         return total_path
 
+    # def move_bot(self):
+    #     """Move the bot one step along the path if a path exists."""
+    #     if self.path:
+    #         self.bot_position = self.path.pop(0)  # Move to the next step in the path
+    
     def move_bot(self):
-        """Move the bot one step along the path if a path exists."""
+        """Move the bot one step along the path if a path exists and it's safe."""
         if self.path:
-            self.bot_position = self.path.pop(0)  # Move to the next step in the path
+            # Check if the next step in the path is safe
+            next_step = self.path[0]
+            if self.fire_spread.fire_grid[next_step[0], next_step[1]] == 0:  # Next step is not on fire
+                self.bot_position = self.path.pop(0)  # Move to the next step in the path
+            else:
+                # Fire has spread to the path, recalculate a new path
+                self.plan_path()
+        else:
+            # No path exists or the path was blocked, recalculate
+            self.plan_path()
 
     def plan_path(self):
         """Plan the path from bot to button, ignoring the initial fire position."""
