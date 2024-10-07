@@ -2,7 +2,7 @@ import time
 import tkinter as tk
 import csv
 from environment import ShipEnvironment
-from bots import Bot1, Bot2, Bot3, Bot4, Bot5
+from bots import Bot1, Bot2, Bot3, Bot4
 from utils.grid_visualizer import GridVisualizer
 
 # def main():
@@ -69,7 +69,7 @@ def run_simulation(simulation_no, q=0.5):
     env.create_environment()
 
     # Initialize Bot1 with flammability parameter q
-    bot = Bot5(env, q)
+    bot = Bot4(env, q)
     bot.initialize()  # Initialize fire, bot, and button
 
     # Plan the bot's initial path to the button
