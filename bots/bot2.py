@@ -93,11 +93,6 @@ class Bot2:
             total_path.append(current)
         total_path.reverse()
         return total_path
-
-    # def move_bot(self):
-    #     """Move the bot one step along the path if a path exists."""
-    #     if self.path:
-    #         self.bot_position = self.path.pop(0)  # Move to the next step in the path
     
     def move_bot(self):
         """Move the bot one step along the path if a path exists and it's safe."""

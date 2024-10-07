@@ -1,8 +1,9 @@
-# import time
-# import tkinter as tk
-# from environment import ShipEnvironment
-# from bots import Bot1, Bot2, Bot3, Bot4, Bot5, Bot6
-# from utils.grid_visualizer import GridVisualizer
+import time
+import tkinter as tk
+import csv
+from environment import ShipEnvironment
+from bots import Bot1, Bot2, Bot3, Bot4, Bot5
+from utils.grid_visualizer import GridVisualizer
 
 # def main():
 #     # Create the environment 
@@ -60,14 +61,6 @@
 #     root.mainloop()
 
 
-# if __name__ == "__main__":
-#     main()
-
-import tkinter as tk
-import csv
-from environment import ShipEnvironment
-from bots import Bot1, Bot2
-from utils.grid_visualizer import GridVisualizer
 
 def run_simulation(simulation_no, q=0.5):
     """Run a single simulation of the bot and return the outcome."""
@@ -76,11 +69,11 @@ def run_simulation(simulation_no, q=0.5):
     env.create_environment()
 
     # Initialize Bot1 with flammability parameter q
-    bot = Bot2(env, q)
+    bot = Bot5(env, q)
     bot.initialize()  # Initialize fire, bot, and button
 
     # Plan the bot's initial path to the button
-    bot.plan_path()
+    # bot.plan_path()
 
     # Simulate time steps
     for t in range(1, 200):  # Simulate 20 time steps (can be adjusted)
@@ -115,26 +108,19 @@ def main():
 
     # Run the simulation 100 times
     for sim_no in range(1, 101):
-        outcome = run_simulation(sim_no, q=0.5)
+        outcome = run_simulation(sim_no, q=1.0)
         results.append([sim_no, 0.5, outcome])  # Append (sr no, q, outcome)
 
     # Write results to a CSV file
-    with open('simulation_results_bot2_q=0.5.csv', mode='w', newline='') as file:
+    with open('/Users/vraj21/Documents/Rutgers/1st Sem/AI/Fire bot/final_bot4/simulation_results_bot4_q=1.0.csv', mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(['Sr No', 'q', 'Outcome'])  # Write the header
         writer.writerows(results)  # Write all results
 
     print("Simulation complete! Results saved to 'simulation_results.csv'.")
 
-if __name__ == "__main__":
-    main()
 
-# import time
-# import tkinter as tk
-# import csv
-# from environment import ShipEnvironment
-# from bots import Bot1
-# from utils.grid_visualizer import GridVisualizer
+
 
 # def run_simulation(simulation_no, q=0.5):
 #     """Run a single simulation of the bot and return the outcome."""
@@ -143,7 +129,7 @@ if __name__ == "__main__":
 #     env.create_environment()
 
 #     # Initialize Bot1 with flammability parameter q
-#     bot = Bot1(env, q)
+#     bot = Bot5(env, q)
 #     bot.initialize()  # Initialize fire, bot, and button
 
 #     # Create the Tkinter window and visualizer
@@ -152,7 +138,7 @@ if __name__ == "__main__":
 #     visualizer = GridVisualizer(root, env, bot.fire_spread, bot)
 
 #     # Plan the bot's initial path to the button
-#     bot.plan_path()
+#     # bot.plan_path()
 
 #     # Simulate time steps
 #     for t in range(1, 200):  # Simulate 20 time steps (can be adjusted)
@@ -212,5 +198,5 @@ if __name__ == "__main__":
 
 #     print("Simulation complete! Results saved to 'simulation_results.csv'.")
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
