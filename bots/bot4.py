@@ -366,15 +366,15 @@ class Bot4:
             next_position = self.path[0]
             # Check if the next position is on fire
             if self.fire_spread.fire_grid[next_position[0], next_position[1]] == 1:
-                print("Next position is on fire. Checking alternative paths...")
+                # print("Next position is on fire. Checking alternative paths...")
                 self.path = self.greedy_best_first_search(self.bot_position, self.button_position)  # Replan if next move is invalid
 
-            if self.path and self.path[0] != next_position:  # If path changed
-                print(f"Replanned path: {self.path}")
+            # if self.path and self.path[0] != next_position:  # If path changed
+            #     print(f"Replanned path: {self.path}")
 
             if self.path:
                 self.bot_position = self.path.pop(0)  # Move to the next step in the path
-                print(f"Bot moved to: {self.bot_position}")
+                # print(f"Bot moved to: {self.bot_position}")
 
     def plan_path(self):
         """Plan the path from bot to button, considering fire and proximity to fire."""

@@ -3,7 +3,7 @@ import heapq
 import random
 
 class Bot2:
-    def __init__(self, environment, q=0.5):
+    def __init__(self, environment, q=0.8):
         """Initialize Bot2 with the environment and flammability parameter q."""
         self.environment = environment
         self.q = q

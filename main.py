@@ -66,17 +66,17 @@
 import tkinter as tk
 import csv
 from environment import ShipEnvironment
-from bots import Bot1, Bot2
+from bots import Bot1, Bot2, Bot4
 from utils.grid_visualizer import GridVisualizer
 
-def run_simulation(simulation_no, q=0.5):
+def run_simulation(simulation_no, q=1):
     """Run a single simulation of the bot and return the outcome."""
     # Create the environment
     env = ShipEnvironment()
     env.create_environment()
 
     # Initialize Bot1 with flammability parameter q
-    bot = Bot2(env, q)
+    bot = Bot4(env, q)
     bot.initialize()  # Initialize fire, bot, and button
 
     # Plan the bot's initial path to the button
@@ -115,11 +115,11 @@ def main():
 
     # Run the simulation 100 times
     for sim_no in range(1, 101):
-        outcome = run_simulation(sim_no, q=0.5)
-        results.append([sim_no, 0.5, outcome])  # Append (sr no, q, outcome)
+        outcome = run_simulation(sim_no, q=1)
+        results.append([sim_no, 1, outcome])  # Append (sr no, q, outcome)
 
     # Write results to a CSV file
-    with open('simulation_results_bot2_q=0.5.csv', mode='w', newline='') as file:
+    with open('Bot4_q=1.csv', mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(['Sr No', 'q', 'Outcome'])  # Write the header
         writer.writerows(results)  # Write all results
